@@ -8,8 +8,8 @@
 * [AWS Cloud9](https://aws.amazon.com/cloud9/)
 * [Amazon Simple Storage Service (S3)](https://aws.amazon.com/s3/)
 
-### Howto
-#### Step1:Cloud9
+
+#### Step1 :Cloud9
 - Sign In to the AWS Console us-west-2 (Oregon)
 - Click **Create Environment** on the Cloud9 home page:
 - Name your environment **MythicalMysfitsIDE** with any description you'd like, and click **Next Step**:
@@ -17,14 +17,14 @@
 - Click **Create Environment**:
 - (If you stop to work in Cloud9, stop this EC2 instance.)
 
-#### Cloning Repository
+#### Step2: Cloning Repository
 - fork and clone it 
 ```
 git clone -b python https://github.com/REPLACE_ACCOUT_NAME/aws-modern-application-workshop.git
 cd aws-modern-application-workshop
 ```
 
-### Creating a Static Website in Amazon S3
+#### Step3: Creating a Static Website in Amazon S3
 ```
 aws s3 mb s3://REPLACE_ME_BUCKET_NAME
 aws s3 website s3://REPLACE_ME_BUCKET_NAME --index-document index.html
