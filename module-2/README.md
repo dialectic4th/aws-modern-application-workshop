@@ -37,7 +37,8 @@ aws cloudformation describe-stacks --stack-name MythicalMysfitsCoreStack > ~/env
 
 ## Module 2b: Deploying a Service with AWS Fargate
 ### Step1: Creating a Flask Service Container
-    ```
+
+```
 cd ~/environment/aws-modern-application-workshop/module-2/app
 docker build . -t REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/mythicalmysfits/service:latest
 aws ecr create-repository --repository-name mythicalmysfits/service
@@ -46,6 +47,7 @@ docker push REPLACE_ME_WITH_DOCKER_IMAGE_TAG
 aws ecr describe-images --repository-name mythicalmysfits/service
 ```
 ### Step2: Configuring the Service Prerequisites in Amazon ECS
+
 ```
 aws ecs create-cluster --cluster-name MythicalMysfits-Cluster
 aws logs create-log-group --log-group-name mythicalmysfits-logs
@@ -54,11 +56,14 @@ aws ecs register-task-definition --cli-input-json file://~/environment/aws-moder
 ```
 
 ### Step3: Enabling a Load Balanced Fargate Service
+
 ```
 aws elbv2 create-load-balancer --name mysfits-nlb --scheme internet-facing --type network --subnets REPLACE_ME_PUBLIC_SUBNET_ONE REPLACE_ME_PUBLIC_SUBNET_TWO > ~/environment/nlb-output.json
 aws elbv2 create-target-group --name MythicalMysfits-TargetGroup --port 8080 --protocol TCP --target-type ip --vpc-id REPLACE_ME_VPC_ID --health-check-interval-seconds 10 --health-check-path / --health-check-protocol HTTP --healthy-threshold-count 3 --unhealthy-threshold-count 3 > ~/environment/target-group-output.json
 aws elbv2 create-listener --default-actions TargetGroupArn=REPLACE_ME_NLB_TARGET_GROUP_ARN,Type=forward --load-balancer-arn REPLACE_ME_NLB_ARN --port 80 --protocol TCP > /environment/listiner-output.json
 ```
+
+
 
 ### Step4: Creating a Service with Fargate
 ```
@@ -76,6 +81,7 @@ aws s3 cp ~/environment/aws-modern-application-workshop/module-2/web/index.html 
 
 ![Architecture](/images/module-2/architecture-module-2b.png)
 ### Step1: Creating the CI/CD Pipeline
+
 ```
 aws s3 mb s3://REPLACE_ME_CHOOSE_ARTIFACTS_BUCKET_NAME
 aws s3api put-bucket-policy --bucket REPLACE_ME_ARTIFACTS_BUCKET_NAME --policy file://~/environment/aws-modern-application-workshop/module-2/aws-cli/artifacts-bucket-policy.json
@@ -84,7 +90,10 @@ aws codebuild create-project --cli-input-json file://~/environment/aws-modern-ap
 aws codepipeline create-pipeline --cli-input-json file://~/environment/aws-modern-application-workshop/module-2/aws-cli/code-pipeline.json
 aws ecr set-repository-policy --repository-name mythicalmysfits/service --policy-text file://~/environment/aws-modern-application-workshop/module-2/aws-cli/ecr-policy.json
 ```
+
+
 ### Step2: Test the CI/CD Pipeline
+
 ```
 git config --global user.name "REPLACE_ME_WITH_YOUR_NAME"
 git config --global user.email REPLACE_ME_WITH_YOUR_EMAIL@example.com
