@@ -78,7 +78,7 @@ aws s3 cp ~/environment/aws-modern-application-workshop/module-2/web/index.html 
 
 
 ## Module 2c: Automating Deployments using AWS Code Services
-
+**Replace Github and CirclcCI later** 
 ![Architecture](/images/module-2/architecture-module-2b.png)
 ### Step1: Creating the CI/CD Pipeline
 
