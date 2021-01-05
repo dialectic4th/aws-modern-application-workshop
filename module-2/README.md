@@ -41,6 +41,10 @@ aws cloudformation describe-stacks --stack-name MythicalMysfitsCoreStack > ~/env
 ```
 cd ~/environment/aws-modern-application-workshop/module-2/app
 docker build . -t REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/mythicalmysfits/service:latest
+docker run -p 8080:8080 REPLACE_ME_WITH_DOCKER_IMAGE_TAG
+```
+
+```
 aws ecr create-repository --repository-name mythicalmysfits/service
 $(aws ecr get-login --no-include-email)
 docker push REPLACE_ME_WITH_DOCKER_IMAGE_TAG
