@@ -1,5 +1,5 @@
 # Build a Modern Application on AWS (Python)
-
+**[リンク：モダンウェブアプリケーションを構築する](https://aws.amazon.com/jp/getting-started/hands-on/build-modern-app-fargate-lambda-dynamodb-python/)**
 ![mysfits-welcome](/images/module-1/mysfits-welcome.png)
 
 ### Welcome to the **Python** version of the Build a Modern Application on AWS Workshop!
