@@ -10,6 +10,7 @@
 
 
 #### Step1 :Cloud9
+- `Use VScode not Cloud9`
 - Sign In to the AWS Console us-west-2 (Oregon)
 - Click **Create Environment** on the Cloud9 home page:
 - Name your environment **MythicalMysfitsIDE** with any description you'd like, and click **Next Step**:
@@ -18,7 +19,7 @@
 - (If you stop to work in Cloud9, stop this EC2 instance.)
 
 #### Step2: Cloning Repository
-- fork and clone it 
+- `fork` and `clone` 
 ```
 git clone -b python https://github.com/REPLACE_ACCOUT_NAME/aws-modern-application-workshop.git
 cd aws-modern-application-workshop
