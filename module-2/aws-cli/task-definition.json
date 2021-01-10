@@ -1,5 +1,5 @@
 {
-  "family": "mythicalmysfitsservice",
+  "family": "REPLACE_SERVICE_NAME",
   "cpu": "256",
   "memory": "512",
   "networkMode": "awsvpc",
