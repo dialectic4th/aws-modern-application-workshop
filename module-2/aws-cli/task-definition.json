@@ -21,9 +21,9 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "mythicalmysfits-logs",
+          "awslogs-group": "REPLACE_ME_LOG-GROUP-NAME",
           "awslogs-region": "REPLACE_ME_REGION",
-          "awslogs-stream-prefix": "awslogs-mythicalmysfits-service"
+          "awslogs-stream-prefix": "awslogs-REPLACE_ME_REGION"
         }
       },
       "essential": true
