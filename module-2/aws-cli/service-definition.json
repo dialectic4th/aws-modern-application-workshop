@@ -1,6 +1,6 @@
 {
-  "serviceName": "MythicalMysfits-Service",
-  "cluster": "MythicalMysfits-Cluster",
+  "serviceName": "REPLACE_ME_SERVICE_NAME",
+  "cluster": "REPLACE_ME_CLUSTER_NAME",
   "launchType": "FARGATE",
   "deploymentConfiguration": {
     "maximumPercent": 200,
@@ -19,10 +19,10 @@
       ]
     }
   },
-  "taskDefinition": "mythicalmysfitsservice",
+  "taskDefinition": "REPLACE_ME_SERVICE_NAME",
   "loadBalancers": [
     {
-      "containerName": "MythicalMysfits-Service",
+      "containerName": "REPLACE_ME_SERVICE_NAME",
       "containerPort": 8080,
       "targetGroupArn": "REPLACE_ME_NLB_TARGET_GROUP_ARN"
     }
