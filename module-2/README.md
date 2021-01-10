@@ -24,20 +24,19 @@
 * [**A DynamoDB VPC Endpoint**](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/vpc-endpoints-dynamodb.html) - our microservice backend will eventually integrate with [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) for persistence (as part of module 3).
 * [**A Security Group**](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) - Allows your docker containers to receive traffic on port 8080 from the Internet through the Network Load Balancer.
 * [**IAM Roles**](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) - Identity and Access Management Roles are created. These will be used throughout the workshop to give AWS services or resources you create access to other AWS services like DynamoDB, S3, and more.
+- `sh 00run_cloudformation.sh REPLACE_ME_STACK_NAME`
+- **Pay attention to the charge(Especially NAT gateway)**
 ```
-aws cloudformation create-stack --stack-name MythicalMysfitsCoreStack --capabilities CAPABILITY_NAMED_IAM --template-body file://~/environment/aws-modern-application-workshop/module-2/cfn/core.yml   
-aws cloudformation describe-stacks --stack-name MythicalMysfitsCoreStack
-
-"StackStatus": "CREATE_IN_PROGRESS" → "StackStatus": "CREATE_COMPLETE"
-
-aws cloudformation describe-stacks --stack-name MythicalMysfitsCoreStack > ~/environment/cloudformation-core-output.json
+aws cloudformation create-stack --stack-name STACK_NAME --capabilities CAPABILITY_NAMED_IAM --template-body file://$PWD/cfn/core.yml   
+aws cloudformation describe-stacks --stack-name STACK_NAME
+aws cloudformation describe-stacks --stack-name STACK_NAME  > $PWD/../outputs/cloudformation-core-output.json
 ```
 
 
 
 ## Module 2b: Deploying a Service with AWS Fargate
 ### Step1: Creating a Flask Service Container
-
+- `sh 01run_container.sh REPLACE_ME_ACCOUNT_ID REPLACE_ME_REOPOSITORY_NAME TAG_NAME`
 ```
 cd ~/environment/aws-modern-application-workshop/module-2/app
 docker build . -t REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/REPLACE_ME_REOPOSITORY_NAME:TAG_NAME
@@ -53,12 +52,12 @@ docker push REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/REPLAC
 aws ecr describe-images --repository-name REPLACE_ME_REOPOSITORY_NAME:TAG_NAME
 ```
 ### Step2: Configuring the Service Prerequisites in Amazon ECS
-
+- `vim aws-cli/task-definition.json`
+- `sh 02run_ecs.sh CLUSTER-NAME LOG-GROUP-NAME`
 ```
-aws ecs create-cluster --cluster-name MythicalMysfits-Cluster
-aws logs create-log-group --log-group-name mythicalmysfits-logs
-vim ~/environment/aws-modern-application-workshop/module-2/aws-cli/task-definition.json
-aws ecs register-task-definition --cli-input-json file://~/environment/aws-modern-application-workshop/module-2/aws-cli/task-definition.json
+aws ecs create-cluster --cluster-name CLUSTER-NAME
+aws logs create-log-group --log-group-name LOG-GROUP-NAME
+aws ecs register-task-definition --cli-input-json file://$PWD/aws-cli/task-definition.json
 ```
 
 ### Step3: Enabling a Load Balanced Fargate Service
