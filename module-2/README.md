@@ -40,15 +40,17 @@ aws cloudformation describe-stacks --stack-name MythicalMysfitsCoreStack > ~/env
 
 ```
 cd ~/environment/aws-modern-application-workshop/module-2/app
-docker build . -t REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/mythicalmysfits/service:latest
-docker run -p 8080:8080 REPLACE_ME_WITH_DOCKER_IMAGE_TAG
+docker build . -t REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/REPLACE_ME_REOPOSITORY_NAME:TAG_NAME
+docker run -p 8080:8080 REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/REPLACE_ME_REOPOSITORY_NAME:TAG_NAME
+curl http://0.0.0.0:8080/ 
+{"message":"Nothing here, used for health check. Try /mysfits instead."}
 ```
 
 ```
-aws ecr create-repository --repository-name mythicalmysfits/service
-$(aws ecr get-login --no-include-email)
-docker push REPLACE_ME_WITH_DOCKER_IMAGE_TAG
-aws ecr describe-images --repository-name mythicalmysfits/service
+aws ecr create-repository --repository-name REPLACE_ME_REOPOSITORY_NAME
+aws ecr get-login-password --region REPLACE_ME_REGION | docker login --username AWS --password-stdin REPLACE_ME_ACCOUNT_ID.dkr.REPLACE_ME_REGION.amazonaws.com
+docker push REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/REPLACE_ME_REOPOSITORY_NAME:TAG_NAME
+aws ecr describe-images --repository-name REPLACE_ME_REOPOSITORY_NAME:TAG_NAME
 ```
 ### Step2: Configuring the Service Prerequisites in Amazon ECS
 
