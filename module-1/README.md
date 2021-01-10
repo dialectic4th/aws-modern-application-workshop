@@ -10,7 +10,8 @@
 
 
 #### Step1 :Cloud9
-- `Use VScode not Cloud9`
+- `Use VScode not Cloud9(in terms of fee, network settings and other developments not AWS)`
+- `Use us-west-2 not others(in terms of fee and response time)`
 - Sign In to the AWS Console us-west-2 (Oregon)
 - Click **Create Environment** on the Cloud9 home page:
 - Name your environment **MythicalMysfitsIDE** with any description you'd like, and click **Next Step**:
