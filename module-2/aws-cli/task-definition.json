@@ -10,7 +10,7 @@
   "taskRoleArn": "REPLACE_ME_ECS_TASK_ROLE_ARN",
   "containerDefinitions": [
     {
-      "name": "MythicalMysfits-Service",
+      "name": "REPLACE_SERVICE_NAME",
       "image": "REPLACE_ME_IMAGE_TAG_USED_IN_ECR_PUSH",
       "portMappings": [
         {
@@ -23,7 +23,7 @@
         "options": {
           "awslogs-group": "REPLACE_ME_LOG-GROUP-NAME",
           "awslogs-region": "REPLACE_ME_REGION",
-          "awslogs-stream-prefix": "awslogs-REPLACE_ME_REGION"
+          "awslogs-stream-prefix": "awslogs-REPLACE_SERVICE_NAME"
         }
       },
       "essential": true
