@@ -61,26 +61,35 @@ aws ecs register-task-definition --cli-input-json file://$PWD/aws-cli/task-defin
 ```
 
 ### Step3: Enabling a Load Balanced Fargate Service
-
+- `sh 03Arun_nlb.sh NLB-NAME　PUBLIC_SUBNET_ONE_ID PUBLIC_SUBNET_TWO_ID`
 ```
-aws elbv2 create-load-balancer --name mysfits-nlb --scheme internet-facing --type network --subnets REPLACE_ME_PUBLIC_SUBNET_ONE REPLACE_ME_PUBLIC_SUBNET_TWO > ~/environment/nlb-output.json
-aws elbv2 create-target-group --name MythicalMysfits-TargetGroup --port 8080 --protocol TCP --target-type ip --vpc-id REPLACE_ME_VPC_ID --health-check-interval-seconds 10 --health-check-path / --health-check-protocol HTTP --healthy-threshold-count 3 --unhealthy-threshold-count 3 > ~/environment/target-group-output.json
-aws elbv2 create-listener --default-actions TargetGroupArn=REPLACE_ME_NLB_TARGET_GROUP_ARN,Type=forward --load-balancer-arn REPLACE_ME_NLB_ARN --port 80 --protocol TCP > /environment/listiner-output.json
+aws elbv2 create-load-balancer --name $1 --scheme internet-facing --type network --subnets $2 $3 > $PWD/../outputs/nlb-output.json
 ```
 
+- `sh 03Brun_nlb.sh TARTGET_GROUP_NAME VPC_ID`
+```
+aws elbv2 create-target-group --name $1 --port 8080 --protocol TCP --target-type ip --vpc-id $2 --health-check-interval-seconds 10 --health-check-path / --health-check-protocol HTTP --healthy-threshold-count 3 --unhealthy-threshold-count 3 > $PWD/../outputs/target-group-output.json
+```
 
+- `sh 03Crun_nlb.sh TARGET_GROUP_ARN LOAD_BALANCER_ARN`
+```
+aws elbv2 create-listener --default-actions TargetGroupArn=$1,Type=forward --load-balancer-arn $2 --port 80 --protocol TCP > $PWD/../outputs/listiner-output.json
+```
 
 ### Step4: Creating a Service with Fargate
+- `vim aws-cli/service-definition.json`
+- `sh 04run_service.sh`
+- `open DNSName`(in nlb-output.json)
 ```
-aws ecs create-service --cli-input-json file://~/environment/aws-modern-application-workshop/module-2/aws-cli/service-definition.json > ~/environment/ecs-service-output.json
-cutl http://REPLACE_ME_DNS_NAME/mysfits
-vim ~/environment/aws-modern-application-workshop/module-2/web/index.html
-    var mysfitsApiEndpoint = 'REPLACE_ME'; 
-aws s3 cp ~/environment/aws-modern-application-workshop/module-2/web/index.html s3://INSERT-YOUR-BUCKET-NAME/index.html
+aws ecs create-service --cli-input-json file://$PWD/aws-cli/service-definition.json > $PWD/../outputs/ecs-service-output.json
 ```
 
- Open your website using the same URL used at the end of Module 1 in order to see your new Mythical Mysfits website, which is retrieving JSON data from your Flask API running within a docker container deployed to AWS Fargate!
-
+### Step5: Update Mythical Mysfits to Call the NLB
+- `sh 05run_html.sh INSERT-YOUR-BUCKET-NAME`
+```
+aws s3 cp $PWD/web/index.html s3://$1/index.html
+open http://$1.s3-website-us-west-2.amazonaws.com
+```
 
 ## Module 2c: Automating Deployments using AWS Code Services
 **Replace Github and CirclcCI later** 
