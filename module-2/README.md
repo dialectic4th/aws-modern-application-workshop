@@ -92,10 +92,19 @@ open http://$1.s3-website-us-west-2.amazonaws.com
 ```
 
 ## Module 2c: Automating Deployments using AWS Code Services
-**Replace Github and CirclcCI later** 
+### Replace Github and CirclcCI and AWS CLI
+- show `08update_service.sh`
+- When you update task-container, write `docker-tag` in `task-definition.json` and run `sh 08update_service.sh REPLACE_ME_ACCOUNT_ID REPLACE_ME_REOPOSITORY_NAME TAG_NAME`
+- `Ignore the following`
 ![Architecture](/images/module-2/architecture-module-2b.png)
-### Step1: Creating the CI/CD Pipeline
 
+### Step1: Creating the CI/CD Pipeline
+- `vim aws-cli/artifacts-bucket-policy.json`
+- `vim app/buildspec.yml`
+- `vim aws-cli/code-build-project.json`
+- `vim aws-cli/code-pipeline.json`
+- `vim aws-cli/ecr-policy.json`
+- `sh 06edit_CICD.sh`
 ```
 aws s3 mb s3://REPLACE_ME_CHOOSE_ARTIFACTS_BUCKET_NAME
 aws s3api put-bucket-policy --bucket REPLACE_ME_ARTIFACTS_BUCKET_NAME --policy file://~/environment/aws-modern-application-workshop/module-2/aws-cli/artifacts-bucket-policy.json
@@ -105,9 +114,8 @@ aws codepipeline create-pipeline --cli-input-json file://~/environment/aws-moder
 aws ecr set-repository-policy --repository-name mythicalmysfits/service --policy-text file://~/environment/aws-modern-application-workshop/module-2/aws-cli/ecr-policy.json
 ```
 
-
 ### Step2: Test the CI/CD Pipeline
-
+- `sh 07test_CICD.sh`
 ```
 git config --global user.name "REPLACE_ME_WITH_YOUR_NAME"
 git config --global user.email REPLACE_ME_WITH_YOUR_EMAIL@example.com
