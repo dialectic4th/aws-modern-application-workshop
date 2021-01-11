@@ -1,7 +1,7 @@
 # not working test complete (use github and circleci)
 echo "edit aws-cli/artifacts-bucket-policy.json" 
 echo "write bucket name when running"
-echo "exmaple is mythical-mysfits-python-practice-archifacts-103362761098 MythicalMysfitsService-Repository mythicalmysfits/service"
+echo "exmaple is mythical-mysfits-python-practice-archifacts MythicalMysfitsService-Repository mythicalmysfits/service"
 echo $1
 echo $2
 echo $3
