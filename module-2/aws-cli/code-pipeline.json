@@ -1,6 +1,6 @@
 {
   "pipeline": {
-      "name": "MythicalMysfitsServiceCICDPipeline",
+      "name": "REPLACE_ME_CICD_PIPELINE_NAME",
       "roleArn": "REPLACE_ME_CODEPIPELINE_ROLE_ARN",
       "stages": [
         {
@@ -19,12 +19,12 @@
               },
               "outputArtifacts": [
                 {
-                  "name": "MythicalMysfitsService-SourceArtifact"
+                  "name": "REPLACE_ME_SOURCE_ARTIFACT_NAME"
                 }
               ],
               "configuration": {
                 "BranchName": "master",
-                "RepositoryName": "MythicalMysfitsService-Repository"
+                "RepositoryName": "REPLACE_ME_REPOSITORY_NAME"
               },
               "runOrder": 1
             }
@@ -43,16 +43,16 @@
               },
               "outputArtifacts": [
                 {
-                  "name": "MythicalMysfitsService-BuildArtifact"
+                  "name": "REPLACE_ME_BUILD_ARTIFACT_NAME"
                 }
               ],
               "inputArtifacts": [
                 {
-                  "name": "MythicalMysfitsService-SourceArtifact"
+                  "name": "REPLACE_ME_SOURCE_ARTIFACT_NAME"
                 }
               ],
               "configuration": {
-                "ProjectName": "MythicalMysfitsServiceCodeBuildProject"
+                "ProjectName": "REPLACE_ME_CODE_BUILD_PROJECT_NAME"
               },
               "runOrder": 1
             }
@@ -71,12 +71,12 @@
               },
               "inputArtifacts": [
                 {
-                  "name": "MythicalMysfitsService-BuildArtifact"
+                  "name": "REPLACE_ME_BUILD_ARTIFACT_NAME"
                 }
               ],
               "configuration": {
-                "ClusterName": "MythicalMysfits-Cluster",
-                "ServiceName": "MythicalMysfits-Service",
+                "ClusterName": "REPLACE_ME_CLUSTER_NAME",
+                "ServiceName": "REPLACE_ME_SERVICE_NAME",
                 "FileName": "imagedefinitions.json"
               }
             }
