@@ -28,7 +28,7 @@ cd aws-modern-application-workshop
 
 #### Step3: Creating a Static Website in Amazon S3
 - `vim aws-cli/website-bucket-policy.json`
-- `sh run.sh REPLACE_ME_BUCKET_NAME`
+- `sh scripts/run.sh REPLACE_ME_BUCKET_NAME`
 ```
 aws s3 mb s3://REPLACE_ME_BUCKET_NAME
 aws s3 website s3://REPLACE_ME_BUCKET_NAME --index-document index.html
