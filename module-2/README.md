@@ -24,7 +24,7 @@
 * [**A DynamoDB VPC Endpoint**](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/vpc-endpoints-dynamodb.html) - our microservice backend will eventually integrate with [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) for persistence (as part of module 3).
 * [**A Security Group**](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) - Allows your docker containers to receive traffic on port 8080 from the Internet through the Network Load Balancer.
 * [**IAM Roles**](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) - Identity and Access Management Roles are created. These will be used throughout the workshop to give AWS services or resources you create access to other AWS services like DynamoDB, S3, and more.
-- `sh 00run_cloudformation.sh REPLACE_ME_STACK_NAME`
+- `sh scripts/00run_cloudformation.sh REPLACE_ME_STACK_NAME`
 - **Pay attention to the charge(Especially NAT gateway)**
 ```
 aws cloudformation create-stack --stack-name STACK_NAME --capabilities CAPABILITY_NAMED_IAM --template-body file://$PWD/cfn/core.yml   
@@ -36,7 +36,7 @@ aws cloudformation describe-stacks --stack-name STACK_NAME  > $PWD/../outputs/cl
 
 ## Module 2b: Deploying a Service with AWS Fargate
 ### Step1: Creating a Flask Service Container
-- `sh 01run_container.sh REPLACE_ME_ACCOUNT_ID REPLACE_ME_REOPOSITORY_NAME TAG_NAME`
+- `sh scripts/01run_container.sh REPLACE_ME_ACCOUNT_ID REPLACE_ME_REOPOSITORY_NAME TAG_NAME`
 ```
 cd ~/environment/aws-modern-application-workshop/module-2/app
 docker build . -t REPLACE_ME_ACCOUNT_ID.dkr.ecr.REPLACE_ME_REGION.amazonaws.com/REPLACE_ME_REOPOSITORY_NAME:TAG_NAME
@@ -53,7 +53,7 @@ aws ecr describe-images --repository-name REPLACE_ME_REOPOSITORY_NAME:TAG_NAME
 ```
 ### Step2: Configuring the Service Prerequisites in Amazon ECS
 - `vim aws-cli/task-definition.json`
-- `sh 02run_ecs.sh CLUSTER-NAME LOG-GROUP-NAME`
+- `sh scripts/02run_ecs.sh CLUSTER-NAME LOG-GROUP-NAME`
 ```
 aws ecs create-cluster --cluster-name CLUSTER-NAME
 aws logs create-log-group --log-group-name LOG-GROUP-NAME
@@ -61,31 +61,31 @@ aws ecs register-task-definition --cli-input-json file://$PWD/aws-cli/task-defin
 ```
 
 ### Step3: Enabling a Load Balanced Fargate Service
-- `sh 03Arun_nlb.sh NLB-NAME　PUBLIC_SUBNET_ONE_ID PUBLIC_SUBNET_TWO_ID`
+- `sh scripts/03Arun_nlb.sh NLB-NAME　PUBLIC_SUBNET_ONE_ID PUBLIC_SUBNET_TWO_ID`
 ```
 aws elbv2 create-load-balancer --name $1 --scheme internet-facing --type network --subnets $2 $3 > $PWD/../outputs/nlb-output.json
 ```
 
-- `sh 03Brun_nlb.sh TARTGET_GROUP_NAME VPC_ID`
+- `sh scripts/03Brun_nlb.sh TARTGET_GROUP_NAME VPC_ID`
 ```
 aws elbv2 create-target-group --name $1 --port 8080 --protocol TCP --target-type ip --vpc-id $2 --health-check-interval-seconds 10 --health-check-path / --health-check-protocol HTTP --healthy-threshold-count 3 --unhealthy-threshold-count 3 > $PWD/../outputs/target-group-output.json
 ```
 
-- `sh 03Crun_nlb.sh TARGET_GROUP_ARN LOAD_BALANCER_ARN`
+- `sh scripts/03Crun_nlb.sh TARGET_GROUP_ARN LOAD_BALANCER_ARN`
 ```
 aws elbv2 create-listener --default-actions TargetGroupArn=$1,Type=forward --load-balancer-arn $2 --port 80 --protocol TCP > $PWD/../outputs/listiner-output.json
 ```
 
 ### Step4: Creating a Service with Fargate
 - `vim aws-cli/service-definition.json`
-- `sh 04run_service.sh`
+- `sh scripts/04run_service.sh`
 - `open DNSName`(in nlb-output.json)
 ```
 aws ecs create-service --cli-input-json file://$PWD/aws-cli/service-definition.json > $PWD/../outputs/ecs-service-output.json
 ```
 
 ### Step5: Update Mythical Mysfits to Call the NLB
-- `sh 05run_html.sh INSERT-YOUR-BUCKET-NAME`
+- `sh scripts/05run_html.sh INSERT-YOUR-BUCKET-NAME`
 ```
 aws s3 cp $PWD/web/index.html s3://$1/index.html
 open http://$1.s3-website-us-west-2.amazonaws.com
@@ -93,8 +93,8 @@ open http://$1.s3-website-us-west-2.amazonaws.com
 
 ## Module 2c: Automating Deployments using AWS Code Services
 ### Replace Github and CirclcCI and AWS CLI
-- show `08update_service.sh`
-- When you update task-container, write `docker-tag` in `task-definition.json` and run `sh 08update_service.sh REPLACE_ME_ACCOUNT_ID REPLACE_ME_REOPOSITORY_NAME TAG_NAME`
+- show `scripts/08update_service.sh`
+- When you want to update task-container, write docker-tag in `aws-cli/task-definition.json` and run `sh scripts/08update_service.sh REPLACE_ME_ACCOUNT_ID REPLACE_ME_REOPOSITORY_NAME TAG_NAME`
 - `Ignore the following`
 ![Architecture](/images/module-2/architecture-module-2b.png)
 
