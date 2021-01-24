@@ -77,12 +77,29 @@ aws elbv2 create-listener --default-actions TargetGroupArn=$1,Type=forward --loa
 ```
 
 ### Step4: Creating a Service with Fargate
+- select public or private subnet 
+- if you use private subnet
+    - `aws aws cloudformation create-stack --stack-name REPLACE_ME_STACK_NAME --capabilities CAPABILITY_NAMED_IAM --template-body file://$PWD/cfn/nat.yml `
+    - `aws cloudformation describe-stacks --stack-name REPLACE_ME_STACK_NAME  > $PWD/../outputs/cloudformation-nat-output.json`
+- **Pay attention to the charge(Especially NAT gateway)**
 - `vim aws-cli/service-definition.json`
 - `sh scripts/04run_service.sh`
 - `open DNSName`(in nlb-output.json)
+
 ```
+service-definition
+      "assignPublicIp": "ENABLED or DISABLED",
+      "securityGroups": [
+        "sg-0ee5beb57b1ce3562"
+      ],
+      "subnets": [
+        "PUBLIC ONE or PRIVATE ONE",
+        "PUBLIC ONE or PRIVATE ONE"
+
 aws ecs create-service --cli-input-json file://$PWD/aws-cli/service-definition.json > $PWD/../outputs/ecs-service-output.json
 ```
+
+
 
 ### Step5: Update Mythical Mysfits to Call the NLB
 - `sh scripts/05run_html.sh INSERT-YOUR-BUCKET-NAME`
