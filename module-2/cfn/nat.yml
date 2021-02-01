@@ -114,4 +114,4 @@ Outputs:
     Description: REPLACE_ME_NAT_GATEWAY_TWO
     Value: !Ref NatGatewayTwo
     Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'NatGatewayOne' ] ]
+      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'NatGatewayTwo' ] ]
