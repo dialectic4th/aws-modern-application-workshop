@@ -1,12 +1,6 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: This stack deploys the core network infrastructure and IAM resources
-             to be used for a service hosted in Amazon ECS using AWS Fargate.
-
-# Outputs揃える
-# DependsOnで他スタックを参照できるのか確認
-# !Refを!ImportValueにする
-
+Description: This stack deploys the NAT gateway infrastructure after core.yml deployed .
 
 Mappings:
   SubnetConfig:
@@ -20,6 +14,7 @@ Mappings:
       CIDR: '10.0.2.0/24'
     PrivateTwo:
       CIDR: '10.0.3.0/24'
+      
 Resources:
   # Setup networking resources for the private subnets. Containers
   # in these subnets have only private IP addresses, and must use a NAT
@@ -27,28 +22,28 @@ Resources:
   # each private subnet.
   NatGatewayOneAttachment:
     Type: AWS::EC2::EIP
-    DependsOn: GatewayAttachement
+    # DependsOn: GatewayAttachement
     Properties:
         Domain: vpc
   NatGatewayTwoAttachment:
     Type: AWS::EC2::EIP
-    DependsOn: GatewayAttachement
+    # DependsOn: GatewayAttachement
     Properties:
         Domain: vpc
   NatGatewayOne:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NatGatewayOneAttachment.AllocationId
-      SubnetId: !Ref PublicSubnetOne
+      SubnetId: !ImportValue MythicalMysfitsCoreStack:PublicSubnetOne
   NatGatewayTwo:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NatGatewayTwoAttachment.AllocationId
-      SubnetId: !Ref PublicSubnetTwo
+      SubnetId: !ImportValue MythicalMysfitsCoreStack:PublicSubnetTwo
   PrivateRouteTableOne:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref 'VPC'
+      VpcId: !ImportValue MythicalMysfitsCoreStack:VPCId
   PrivateRouteOne:
     Type: AWS::EC2::Route
     Properties:
@@ -59,11 +54,11 @@ Resources:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PrivateRouteTableOne
-      SubnetId: !Ref PrivateSubnetOne
+      SubnetId: !ImportValue MythicalMysfitsCoreStack:PrivateSubnetOne
   PrivateRouteTableTwo:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref 'VPC'
+      VpcId: !ImportValue MythicalMysfitsCoreStack:VPCId
   PrivateRouteTwo:
     Type: AWS::EC2::Route
     Properties:
@@ -74,7 +69,7 @@ Resources:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PrivateRouteTableTwo
-      SubnetId: !Ref PrivateSubnetTwo
+      SubnetId: !ImportValue MythicalMysfitsCoreStack:PrivateSubnetTwo
 
   # VPC Endpoint for DynamoDB
   # If a container needs to access DynamoDB (coming in module 3) this
@@ -94,7 +89,7 @@ Resources:
         - !Ref 'PrivateRouteTableOne'
         - !Ref 'PrivateRouteTableTwo'
       ServiceName: !Join [ "", [ "com.amazonaws.", { "Ref": "AWS::Region" }, ".dynamodb" ] ]
-      VpcId: !Ref 'VPC'
+      VpcId: !ImportValue sample-stack:SampleVPCId
 
 # These are the values output by the CloudFormation template. Be careful
 # about changing any of them, because of them are exported with specific
@@ -110,8 +105,13 @@ Outputs:
     Value: !Ref AWS::AccountId
     Export:
       Name: !Join [ ':', [ !Ref 'AWS::StackName', 'CurrentAccount' ] ]
-  hoge:
-    Description: REPLACE_ME_ECS_SERVICE_ROLE_ARN
-    Value: 'hoge'
+  NatGatewayOne:
+    Description: REPLACE_ME_NAT_GATEWAY_ONE
+    Value: !Ref NatGatewayOne
     Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'hoge' ] ]
+      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'NatGatewayOne' ] ]
+  NatGatewayTwo:
+    Description: REPLACE_ME_NAT_GATEWAY_TWO
+    Value: !Ref NatGatewayTwo
+    Export:
+      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'NatGatewayOne' ] ]

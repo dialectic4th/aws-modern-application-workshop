@@ -25,6 +25,7 @@
 * [**A Security Group**](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) - Allows your docker containers to receive traffic on port 8080 from the Internet through the Network Load Balancer.
 * [**IAM Roles**](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) - Identity and Access Management Roles are created. These will be used throughout the workshop to give AWS services or resources you create access to other AWS services like DynamoDB, S3, and more.
 - `sh scripts/00run_cloudformation.sh REPLACE_ME_STACK_NAME`
+- default setting dont use  NAT-gateway 
 - **Pay attention to the charge(Especially NAT gateway)**
 ```
 aws cloudformation create-stack --stack-name STACK_NAME --capabilities CAPABILITY_NAMED_IAM --template-body file://$PWD/cfn/core.yml   
