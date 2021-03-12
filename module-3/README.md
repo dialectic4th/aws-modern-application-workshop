@@ -11,6 +11,37 @@
 
 Now that you have a service deployed and a working CI/CD pipeline to deliver changes to that service automatically whenever you update your code repository, you can quickly move new application features from conception to available for your Mythical Mysfits customers.  With this increased agility, let's add another foundational piece of functionality to the Mythical Mysfits website architecture, a data tier.  In this module you will create a table in [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), a managed and scalable NoSQL database service on AWS with super fast performance.  Rather than have all of the Mysfits be stored in a static JSON file, we will store them in a database to make the websites future more extensible and scalable.
 
+#### Ceate DynamoDB
+- Change name as with module 2
+
+```file://$PWD/aws-cli/task-definition.json
+$ aws dynamodb create-table --cli-input-json file://$PWD/module-3/aws-cli/dynamodb-table.json
+$ aws dynamodb describe-table --table-name MysfitsTable
+$ aws dynamodb scan --table-name MysfitsTable
+$ aws dynamodb batch-write-item --request-items file://$PWD/module-3/aws-cli/populate-dynamodb.json
+$ aws dynamodb scan --table-name MysfitsTable
+```
+
+#### Update Container of ECS in module-2
+- (Don't use Codepipeline) 
+- `run` and `git push`
+```
+$ cp -r app/* ../module-2/app
+$ cd ../module-2
+$ sh scripts/08update_service.sh REPLACE_ME_ACCOUNT_ID REPLACE_ME_REOPOSITORY_NAME TAG_NAME
+```
+#### Update html 
+```
+$ vim web/index.html
+  <script>
+
+    var mysfitsApiEndpoint = 'REPLACE_ME';
+$ cp web/index.html ../module-2/web/
+$ cd ../module-2
+$ aws s3 cp --recursive web/ s3://REPLACE_YOUR_BUCKET_NAME/
+```
+
+
 ### Adding a NoSQL Database to Mythical Mysfits
 
 #### Create a DynamoDB Table
